@@ -1,0 +1,9 @@
+{
+  "name": "google-sheet-start",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "googleapis": "39"
+  }
+}
