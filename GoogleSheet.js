@@ -104,6 +104,24 @@ class GoogleSheet {
         });
     }
 
+    async writeExample(spreadsheetId) {
+        const oAuth2Client = await this.getOAuth2Provider();
+        const sheets = google.sheets({version: 'v4', auth: oAuth2Client});
+        const resource = {
+            values: [
+                ["Item", "Cost", "Stocked", "Ship Date" , "XXX"],
+                ["Wheel", "$20.50", "4", "3/1/2016"],
+                ["Door", "$15", "2", "3/15/2016"]
+            ],
+          };
+        await sheets.spreadsheets.values.update({
+            spreadsheetId,
+            range: `'แผ่น2'!A1:E5`,
+            valueInputOption: 'RAW',
+            resource
+        })
+    }
+
     async createSheet(fileName) {
         try {
             const oAuth2Client = await this.getOAuth2Provider();
@@ -123,8 +141,22 @@ class GoogleSheet {
         }
     }
 
-    async writeSheet(spreadsheetId) {
-        //  TODO
+    async writeSheet(spreadsheetId, values, range) {
+        try {
+            const oAuth2Client = await this.getOAuth2Provider();
+            const sheets = google.sheets({version: 'v4', auth: oAuth2Client});
+            const resource = {
+                values
+              };
+            await sheets.spreadsheets.values.update({
+                spreadsheetId,
+                range,
+                valueInputOption: 'RAW',
+                resource
+            })
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     async readSheet(spreadsheetId) {
@@ -132,10 +164,15 @@ class GoogleSheet {
     }
 
     async run() {
-        // const response = await this.createSheet('Hi');
+        // const response = await this.createSheet('Test-Sheet');
         // console.log('response', response);
-        await this.readExampleFile();
-        // await this.writeTokenFile();
+        await this.writeSheet(
+            '1Z17jqVnXi3SaTnB_SOhfA5daXTxu0lLj9bP0fUj3HqY',
+            [
+                ["Title", "Details", "Details", "Details"]
+            ],
+            `'แผ่น1'!A2:F4`
+        );
     }
 
     
